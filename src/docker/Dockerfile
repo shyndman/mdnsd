@@ -40,17 +40,17 @@ ARG BIN_DIR=/usr/local/bin
 
 RUN mkdir -p ${INSTALL_DIR}/venv
 COPY --chmod=0755 src/python/* ${INSTALL_DIR}/
+COPY --chmod=0755 src/docker/entrypoint.sh ${INSTALL_DIR}/entrypoint.sh
 COPY --from=build --chmod=0751 ${INSTALL_DIR}/build/mdns-repeater ${BIN_DIR}/
 COPY --from=build ${INSTALL_DIR}/venv ${INSTALL_DIR}/venv
 
-RUN apk add --no-cache libcap-setcap python3
+RUN apk add --no-cache libcap-setcap python3 su-exec
 
 RUN setcap cap_net_raw=+ep ${BIN_DIR}/mdns-repeater
 
 # Create non-root user
 RUN addgroup -S mdnsd && adduser -S -G mdnsd -H -s /sbin/nologin mdnsd
 
-USER mdnsd
 # -u == unbuffered output
 #  (otherwise entrypoint logs are masked by mdns-repeater replacing the process)
-ENTRYPOINT ["/usr/local/share/mdnsd/venv/bin/python", "-u", "/usr/local/share/mdnsd/entrypoint.py"]
+ENTRYPOINT ["/usr/local/share/mdnsd/entrypoint.sh", "/usr/local/share/mdnsd/venv/bin/python", "-u", "/usr/local/share/mdnsd/entrypoint.py"]
