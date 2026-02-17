@@ -19,7 +19,7 @@ docker run -d \
   --cap-add NET_RAW \
   -e MDNSD_HOST_INTERFACES='[if_names]' \
   -e MDNSD_DOCKER_NETWORKS='[net_names]' \
-  -v '/var/run/docker.sock:/var/run/docker.sock:ro' \
+  --volume '/var/run/docker.sock:/var/run/docker.sock:ro' \
   ghcr.io/shyndman/mdnsd:latest
 ```
 
@@ -62,7 +62,7 @@ The examples include several security hardening options:
 - `cap_drop: ALL` / `--cap-drop ALL`: Drops all Linux capabilities
 - `cap_add: NET_RAW` / `--cap-add NET_RAW`: Adds only the NET_RAW capability required for mdns-repeater to function
 
-These options ensure the container runs with minimal privileges. The mdns-repeater binary has been configured with setcap to allow it to run as a non-root user while still being able to send raw packets.
+These options ensure the container runs with minimal privileges. The mdns-repeater binary has been configured with setcap (see `src/docker/Dockerfile`) to allow it to run as a non-root user while still being able to send raw packets.
 
 > [!CAUTION]
 > Mounting the Docker socket (`/var/run/docker.sock`) to a container (even as read-only!) essentially gives it root access to your machine. Be aware of the security considerations this involves, and consider using a socket proxy.
