@@ -4,6 +4,5 @@ build/
 .git
 .gitignore
 .gitmodules
-README.md
 LICENSE
 *.md
