@@ -39,7 +39,7 @@ ARG INSTALL_DIR
 ARG BIN_DIR=/usr/local/bin
 
 RUN mkdir -p ${INSTALL_DIR}/venv
-COPY --chmod=0751 src/python/* ${INSTALL_DIR}/
+COPY --chmod=0755 src/python/* ${INSTALL_DIR}/
 COPY --from=build --chmod=0751 ${INSTALL_DIR}/build/mdns-repeater ${BIN_DIR}/
 COPY --from=build ${INSTALL_DIR}/venv ${INSTALL_DIR}/venv
 
