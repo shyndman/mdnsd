@@ -5,7 +5,7 @@ ARG NAME=mdnsd
 ARG INSTALL_DIR=/usr/local/share/${NAME}
 
 # ----------------------[ Stage 1 ]---------------------------------
-FROM alpine AS build
+FROM alpine:3.23.3 AS build
 ARG INSTALL_DIR
 ARG BUILD_DIR=${INSTALL_DIR}
 
@@ -32,7 +32,7 @@ RUN ${BUILD_DIR}/venv/bin/pip install -r \
   ${BUILD_DIR}/src/python/requirements.txt
 
 # ----------------------[ Stage 2 ]---------------------------------
-FROM alpine AS image
+FROM alpine:3.23.3 AS image
 
 ARG NAME
 ARG INSTALL_DIR
