@@ -1,3 +1,8 @@
 venv/
 **/*.env*
 build/
+.git
+.gitignore
+.gitmodules
+LICENSE
+*.md

@@ -46,6 +46,11 @@ COPY --from=build ${INSTALL_DIR}/venv ${INSTALL_DIR}/venv
 RUN apk add --no-cache libcap-setcap python3
 
 RUN setcap cap_net_raw=+ep ${BIN_DIR}/mdns-repeater
+
+# Create non-root user
+RUN addgroup -S mdnsd && adduser -S -G mdnsd -H -s /sbin/nologin mdnsd
+
+USER mdnsd
 # -u == unbuffered output
 #  (otherwise entrypoint logs are masked by mdns-repeater replacing the process)
 ENTRYPOINT ["/usr/local/share/mdnsd/venv/bin/python", "-u", "/usr/local/share/mdnsd/entrypoint.py"]
