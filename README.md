@@ -20,7 +20,7 @@ docker run -d \
   -e MDNSD_HOST_INTERFACES='[if_names]' \
   -e MDNSD_DOCKER_NETWORKS='[net_names]' \
   --volume '/var/run/docker.sock:/var/run/docker.sock:ro' \
-  ghcr.io/shyndman/mdnsd:latest
+  ghcr.io/shyndman/mdnsd:v0.0.0
 ```
 
 ### Docker Compose
@@ -32,7 +32,7 @@ services:
     environment:
       MDNSD_DOCKER_NETWORKS: '[net_names]'
       MDNSD_HOST_INTERFACES: '[if_names]'
-    image: ghcr.io/shyndman/mdnsd:latest
+    image: ghcr.io/shyndman/mdnsd:v0.0.0
     network_mode: host
     restart: always
     volumes:
