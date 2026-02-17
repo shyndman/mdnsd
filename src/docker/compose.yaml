@@ -4,7 +4,7 @@ services:
     environment:
       MDNSD_DOCKER_NETWORKS: 'traefik-proxy'
       MDNSD_HOST_INTERFACES: 'enp6s0'
-    image: ghcr.io/shyndman/mdnsd:v0.0.0
+    image: ghcr.io/shyndman/mdnsd:v0.0.1
     network_mode: host
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
