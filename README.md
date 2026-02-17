@@ -22,6 +22,8 @@ docker run -d \
 
 #### Using Docker Hub
 
+The original Docker Hub images are published under the `kjkent` namespace:
+
 ```yaml
 services:
   mdnsd:
@@ -37,6 +39,8 @@ services:
 ```
 
 #### Using GitHub Container Registry
+
+Images from this repository are automatically published to GitHub Container Registry:
 
 ```yaml
 services:
