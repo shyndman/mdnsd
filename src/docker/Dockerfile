@@ -19,7 +19,7 @@ ARG BUILD_DIR=${INSTALL_DIR}
 # ------------------------
 # COPY <dir> copies the *contents* of <dir>, not <dir itself>, regardless
 #  of <existing_dest> or <dest>/
-COPY ${PWD} ${BUILD_DIR}
+COPY . ${BUILD_DIR}
 # ------------------------
 
 RUN ls -la ${BUILD_DIR}
