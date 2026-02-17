@@ -1,6 +1,0 @@
-services:
-  mdnsd:
-    build:
-      context: ../.. # Project root
-      dockerfile: src/docker/Dockerfile
-    image: kjkent/mdnsd:${IMAGE_VERSION:-local}

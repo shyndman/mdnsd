@@ -11,7 +11,7 @@ ARG BUILD_DIR=${INSTALL_DIR}
 
 # Build from GitHub repo
 # ----------------------
-# ARG REPO=https://github.com/kjkent/mdnsd.git
+# ARG REPO=https://github.com/shyndman/mdnsd.git
 # ADD ${REPO} ${BUILD_DIR}
 # ----------------------
 

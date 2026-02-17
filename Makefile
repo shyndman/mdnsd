@@ -1,4 +1,4 @@
-# Makefile for mdnsd by kjkent (https://github.com/kjkent)
+# Makefile for mdnsd (https://github.com/shyndman/mdnsd)
 # 
 # mdnsd is a Docker wrapper for mdns-repeater by geekman
 # (https://github.com/geekman/mdns-repeater)
@@ -10,7 +10,7 @@ SRC_DIR := src
 VENV_DIR := venv
 PYTHON_DIR := $(SRC_DIR)/python
 DOCKER_DIR := $(SRC_DIR)/docker
-DOCKER_IMAGE := kjkent/$(NAME)
+DOCKER_IMAGE := ghcr.io/shyndman/$(NAME)
 
 MR_NAME := mdns-repeater
 MR_BUILD_DIR := build
@@ -90,19 +90,21 @@ install: $(MR_BUILD)
 	install -m 0751 -t $(INSTALL_DIR) $<
 
 docker-dev-build: $(MR_BUILD)
-	IMAGE_VERSION=dev docker compose \
+	docker build \
 		--progress=plain \
-		-f $(DOCKER_DIR)/build.yaml \
-		build
+		-f $(DOCKER_DIR)/Dockerfile \
+		-t $(DOCKER_IMAGE):dev \
+		.
 
 docker-dev-push: docker-dev-build
 	docker push $(DOCKER_IMAGE):dev
 
 docker-rel-build: $(MR_BUILD)
-	IMAGE_VERSION=$(RELEASE_VERSION) docker compose \
+	docker build \
 		--progress=plain \
-		-f $(DOCKER_DIR)/build.yaml \
-		build
+		-f $(DOCKER_DIR)/Dockerfile \
+		-t $(DOCKER_IMAGE):$(RELEASE_VERSION) \
+		.
 	
 	docker image tag $(DOCKER_IMAGE):$(RELEASE_VERSION) $(DOCKER_IMAGE):latest
 

@@ -1,7 +1,7 @@
 # mdnsd - mDNS Repeater for Docker
 
 **mdnsd** makes it easy to bridge mDNS packets between Docker networks and
-LAN-facing network interfaces. Pre-built containers are available on [Docker Hub](https://hub.docker.com/r/kjkent/mdnsd) and [GitHub Container Registry](https://github.com/shyndman/mdnsd/pkgs/container/mdnsd).
+LAN-facing network interfaces. Pre-built containers are available on [GitHub Container Registry](https://github.com/shyndman/mdnsd/pkgs/container/mdnsd).
 
 mdnsd is a Python wrapper around the powerful [mdns-repeater](https://github.com/geekman/mdns-repeater) by [**geekman**](https://github.com/geekman). mdnsd provides a convenient abstraction for resolving Docker network names to host interfaces, and passing these to `mdns-repeater` for ...repeating. For advanced use cases, it's possible to pass command-line arguments directly to `mdns-repeater`.
 
@@ -12,35 +12,18 @@ mdnsd is a Python wrapper around the powerful [mdns-repeater](https://github.com
 ```Shell
 docker run -d \
   --name mdnsd \
+  --network host \
+  --read-only \
+  --security-opt no-new-privileges:true \
+  --cap-drop ALL \
+  --cap-add NET_RAW \
   -e MDNSD_HOST_INTERFACES='[if_names]' \
   -e MDNSD_DOCKER_NETWORKS='[net_names]' \
-  -v '/var/run/docker.sock:/var/run/docker.sock:ro'
-  kjkent/mdnsd
+  -v '/var/run/docker.sock:/var/run/docker.sock:ro' \
+  ghcr.io/shyndman/mdnsd:latest
 ```
 
 ### Docker Compose
-
-#### Using Docker Hub
-
-The original Docker Hub images are published under the `kjkent` namespace:
-
-```yaml
-services:
-  mdnsd:
-    container_name: mdnsd
-    environment:
-      MDNSD_DOCKER_NETWORKS: '[net_names]'
-      MDNSD_HOST_INTERFACES: '[if_names]'
-    image: kjkent/mdnsd
-    network_mode: host
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-```
-
-#### Using GitHub Container Registry
-
-Images from this repository are automatically published to GitHub Container Registry:
 
 ```yaml
 services:
@@ -54,6 +37,13 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_RAW
 ```
 
 ## Advice
@@ -73,22 +63,22 @@ services:
 
 ### Building locally
 
-The provided `build.yaml`, by default, builds an image tagged as `kjkent/mdnsd:local`. Similarly, the sample `docker-compose.yaml` looks for an image named `kjkent/mdnsd:latest` (`:latest` being the default tag). These files are found in `src/docker`; edit them to fit your needs.
-
-These commands are given as a loose guide; everybody's requirements and environments differ. If you're in doubt, use a prebuilt image as demonstrated above.
+To build the container locally, use the provided Dockerfile:
 
 ```Shell
 # Clone the repo
-git clone --recursive https://github.com/kjkent/mdnsd.git
+git clone --recursive https://github.com/shyndman/mdnsd.git
+cd mdnsd
 
 # Build the container
-docker compose -f mdnsd/src/docker/build.yaml build
+docker build -t ghcr.io/shyndman/mdnsd:local -f src/docker/Dockerfile .
 
-# Launch the service
-docker compose up -d
+# Run using docker-compose.yaml as a template
+# (Edit src/docker/docker-compose.yaml to use your local image tag)
+docker compose -f src/docker/docker-compose.yaml up -d
 
 # Watch it fly
-docker compose logs --follow
+docker compose -f src/docker/docker-compose.yaml logs --follow
 ```
 
 ### Direct access to `mdns-repeater`
